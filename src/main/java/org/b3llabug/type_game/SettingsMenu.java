@@ -2,21 +2,29 @@
 
 package org.b3llabug.type_game;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class SettingsMenu extends JFrame {
     private JComboBox<String> themeSelector;
     private JButton applyButton;
     private JButton backButton;
-    private String[] themes = {"Default", "Dark", "Light"};
+    private String[] themes = {"original", "twoo"};
+    //FIX: the window that opened settings, so we have something to preview the theme on
+    private JFrame parentFrame;
 
     public SettingsMenu() {
-        setTitle("Settings Menu");
-        setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this(null);
+    }
+
+    public SettingsMenu(JFrame parentFrame) {
+        this.parentFrame = parentFrame;
+        setTitle("settings");
+        setSize(600, 600);
+        //FIX: only the title screen should quit the whole app on close
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridLayout(3, 1));
 
@@ -45,7 +53,9 @@ public class SettingsMenu extends JFrame {
             String selectedTheme = (String) themeSelector.getSelectedItem();
             // Logic to apply the selected theme
             ThemeManager.applyTheme(selectedTheme);
-            JOptionPane.showMessageDialog(SettingsMenu.this, "Theme applied: " + selectedTheme);
+            //FIX: actually restyle the window that opened settings, not just store the choice
+            ThemeManager.applyThemeTo(parentFrame);
+            JOptionPane.showMessageDialog(SettingsMenu.this, "theme applied: " + selectedTheme);
         }
     }
 

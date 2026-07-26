@@ -4,56 +4,64 @@ package org.b3llabug.type_game;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 public class EndScreen extends JFrame {
-    private JLabel scoreLabel;
-    private JButton restartButton;
-    private JButton titleScreenButton;
 
     public EndScreen(int wpm, double accuracy) {
         setTitle("Game Over");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1300, 800);
+        //FIX: only the title screen should quit the whole app on close
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(3, 1, 10, 10));
+        setLayout(null);
 
-        scoreLabel = new JLabel(String.format("Final Score: WPM: %d | Accuracy: %.1f%%", wpm, accuracy), SwingConstants.CENTER);
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        scoreLabel.setForeground(new Color(200, 100, 50));
-        add(scoreLabel);
+        //wpm label
+        JLabel wpmLabel = new JLabel("WPM: " + wpm, SwingConstants.CENTER);
+        wpmLabel.setFont(new Font("Courier New", Font.PLAIN, 80));
+        wpmLabel.setBounds(350, 150, 400, 200);
+        wpmLabel.setBorder(BorderFactory.createLineBorder(Color.green, 4));
+        add(wpmLabel);
 
-        restartButton = new JButton("Restart Game");
-        restartButton.setFont(new Font("Arial", Font.BOLD, 16));
-        restartButton.addActionListener(e -> restartGame());
-        add(restartButton);
+        //acc label
+        JLabel accLabel = new JLabel("ACC: " + accuracy, SwingConstants.CENTER);
+        accLabel.setFont(new Font("Courier New", Font.PLAIN, 50));
+        accLabel.setBounds(750, 200, 400, 200);
+        accLabel.setBorder(BorderFactory.createLineBorder(Color.green, 4));
+        add(accLabel);
 
-        titleScreenButton = new JButton("Return to Title Screen");
-        titleScreenButton.setFont(new Font("Arial", Font.BOLD, 16));
-        titleScreenButton.addActionListener(e -> returnToTitleScreen());
-        add(titleScreenButton);
-    }
+        //again button
+        JButton againButton = new JButton("AGAIN");
+        againButton.setFont(new Font("Courier New", Font.PLAIN, 60));
+        againButton.setBounds(400, 400, 500, 120);
+        againButton.setBorder(BorderFactory.createLineBorder(Color.pink, 4));
+        againButton.setFocusPainted(false);
+        add(againButton);
+        
+        //home button
+        JButton homeButton = new JButton("home");
+        homeButton.setFont(new Font("Courier New", Font.PLAIN, 32));
+        homeButton.setBounds(1050, 20, 200, 50);
+        homeButton.setBorder(BorderFactory.createLineBorder(Color.pink, 3));
+        homeButton.setFocusPainted(false);
+        add(homeButton);
 
-    private void restartGame() {
-        // Logic to restart the game
-        SwingUtilities.invokeLater(() -> {
-            Type_Game game = new Type_Game();
-            game.setVisible(true);
-            dispose(); // Close the EndScreen
+        ///////button actions
+        againButton.addActionListener(e -> {
+            this.dispose();
+            new GameScreen().setVisible(true);
         });
-    }
 
-    private void returnToTitleScreen() {
-        // Logic to return to the title screen
-        SwingUtilities.invokeLater(() -> {
-            TitleScreen titleScreen = new TitleScreen();
-            titleScreen.setVisible(true);
-            dispose(); // Close the EndScreen
+        homeButton.addActionListener(e -> {
+            this.dispose();
+            new TitleScreen().setVisible(true);
         });
+       
+        //background color
+        getContentPane().setBackground(new Color(200, 255, 200));
     }
 }

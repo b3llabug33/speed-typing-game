@@ -68,6 +68,7 @@ public class TitleScreen extends JFrame {
         startButton.setBackground(new Color(102, 68, 120)); // purple
         startButton.setForeground(Color.WHITE);
         startButton.setBounds(250, 420, 400, 70);
+        startButton.setFocusPainted(false);
         startButton.setBorder(BorderFactory.createLineBorder(Color.lightGray, 4));
         //enter to start game
         startButton.addActionListener(e -> startGame());
@@ -77,21 +78,23 @@ public class TitleScreen extends JFrame {
         settingsButton.setBackground(new Color(102, 68, 120));
         settingsButton.addActionListener(e -> openSettings());
         settingsButton.setBounds(40, 470, 80, 80);
-        //make design for this 
+        //make design for this
         add(settingsButton);
-        
+
+        //FIX: pick up whatever theme was last applied
+        ThemeManager.applyThemeTo(this);
     }
 
     private void startGame() {
-        // Transition to the game screen
+        // transition to the game screen
         GameScreen gameScreen = new GameScreen();
         gameScreen.setVisible(true);
-        this.dispose(); // Close the title screen
+        this.dispose(); // close the title screen
     }
 
     private void openSettings() {
-        // Open the settings menu
-        SettingsMenu settingsMenu = new SettingsMenu();
+        //FIX: open the settings menu, passing this window so theme changes preview live
+        SettingsMenu settingsMenu = new SettingsMenu(this);
         settingsMenu.setVisible(true);
     }
 
