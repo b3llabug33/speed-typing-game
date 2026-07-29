@@ -3,6 +3,7 @@
 package org.b3llabug.type_game;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,10 +15,8 @@ public class EndScreen extends JFrame {
 
     public EndScreen(int wpm, double accuracy) {
         setTitle("Game Over");
-        setSize(1300, 800);
         //FIX: only the title screen should quit the whole app on close
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
         setLayout(null);
 
         //wpm label
@@ -40,6 +39,10 @@ public class EndScreen extends JFrame {
         againButton.setBounds(400, 400, 500, 120);
         againButton.setBorder(BorderFactory.createLineBorder(Color.pink, 4));
         againButton.setFocusPainted(false);
+        //FIX: don't let this grab default focus on open - a space press still held
+        //from finishing the round would otherwise immediately "click" it via Swing's
+        //default space-activates-focused-button behavior, skipping this screen entirely
+        againButton.setFocusable(false);
         add(againButton);
         
         //home button
@@ -48,6 +51,7 @@ public class EndScreen extends JFrame {
         homeButton.setBounds(1050, 20, 200, 50);
         homeButton.setBorder(BorderFactory.createLineBorder(Color.pink, 3));
         homeButton.setFocusPainted(false);
+        homeButton.setFocusable(false);
         add(homeButton);
 
         ///////button actions
@@ -63,5 +67,11 @@ public class EndScreen extends JFrame {
        
         //background color
         getContentPane().setBackground(new Color(200, 255, 200));
+
+        //FIX: size the content pane itself (not the outer window) so the window matches
+        //the other screens' drawable area regardless of title bar height
+        getContentPane().setPreferredSize(new Dimension(1300, 800));
+        pack();
+        setLocationRelativeTo(null);
     }
 }

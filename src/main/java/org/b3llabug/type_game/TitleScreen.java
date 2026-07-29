@@ -10,32 +10,17 @@ import javax.swing.*;
 public class TitleScreen extends JFrame {
     private JButton startButton;
 
-    //hand-drawn title art (bellabug at her desk, monitor screen reads "start")
+    //hand-drawn title art 
     private static final String TITLE_ART_PATH = "assets/speedTypingTitle.png";
 
     public TitleScreen() {
         setTitle("//speed typing game//");
-        //matches the title art's native size (and GameScreen's size)
-        setSize(1300, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         //set background color
         getContentPane().setBackground(new Color(18, 38, 10));
         //null so i can do custom positions
         setLayout(null);
-
-        //background art - drawn first so everything else layers on top
-        JLabel background = new JLabel();
-        background.setBounds(0, 0, getWidth(), getHeight());
-        try {
-            BufferedImage titleArt = ImageIO.read(new File(TITLE_ART_PATH));
-            background.setIcon(new ImageIcon(titleArt));
-        } catch (IOException e) {
-            //FIX: missing art shouldn't crash the title screen, just fall back to plain background
-            System.err.println("couldn't load title art at " + TITLE_ART_PATH);
-        }
-        add(background);
 
         //invisible hotspot right over the "start" text on the monitor screen in the art
         JButton startButton = new JButton();
@@ -48,6 +33,28 @@ public class TitleScreen extends JFrame {
         //enter to start game
         startButton.addActionListener(e -> startGame());
         add(startButton);
+
+        //background art - added LAST. Swing z-orders null-layout siblings with the
+        //FIRST-added component on top, so the background has to go on after the
+        //overlay controls or it blanks them out - they still receive clicks fine through it.
+        JLabel background = new JLabel();
+        //getWidth()/getHeight() are still 0 here since pack() hasn't run yet -
+        //use the art's fixed native size directly instead
+        background.setBounds(0, 0, 1300, 800);
+        try {
+            BufferedImage titleArt = ImageIO.read(new File(TITLE_ART_PATH));
+            background.setIcon(new ImageIcon(titleArt));
+        } catch (IOException e) {
+            //FIX: missing art shouldn't crash the title screen, just fall back to plain background
+            System.err.println("couldn't load title art at " + TITLE_ART_PATH);
+        }
+        add(background);
+
+        //FIX: size the content pane itself (not the outer window) so the drawable area
+        //matches the art's native 1300x800 regardless of title bar height
+        getContentPane().setPreferredSize(new Dimension(1300, 800));
+        pack();
+        setLocationRelativeTo(null);
     }
 
     private void startGame() {
