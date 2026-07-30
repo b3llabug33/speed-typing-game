@@ -8,9 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class TitleScreen extends JFrame {
-    private JButton startButton;
-
-    //hand-drawn title art 
+    //hand-drawn title art
     private static final String TITLE_ART_PATH = "assets/speedTypingTitle.png";
 
     public TitleScreen() {

@@ -29,7 +29,6 @@ public class GameScreen extends JFrame {
     private String[] wordsSequence;
     private Random random = new Random();
     private int currentWordIndex = 0;
-    private String currentWord;
     private int timeLeft = 60;
     private int correctWords = 0;
     private int totalWordsTyped = 0;
@@ -204,11 +203,6 @@ public class GameScreen extends JFrame {
         correctWords = 0;
         totalWordsTyped = 0;
         loadNextChunk();
-        currentWordIndex = 0;
-        //gameStartTime = System.currentTimeMillis();
-        //gameTimer.start();
-        updateWordsLabel();
-        //infoLabel.setText("Type the words above!"); maybe do this idk
         gameStartTime = System.currentTimeMillis(); //milliseconds
         gameTimer.start();
         }
@@ -313,8 +307,6 @@ public class GameScreen extends JFrame {
         //closes game screen
         this.dispose();
         }
-
-        //need main
 
     private void resetGame() {
         timeLeft = 60;
