@@ -1,10 +1,6 @@
 package org.b3llabug.type_game;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class TitleScreen extends JFrame {
@@ -39,13 +35,7 @@ public class TitleScreen extends JFrame {
         //getWidth()/getHeight() are still 0 here since pack() hasn't run yet -
         //use the art's fixed native size directly instead
         background.setBounds(0, 0, 1300, 800);
-        try {
-            BufferedImage titleArt = ImageIO.read(new File(TITLE_ART_PATH));
-            background.setIcon(new ImageIcon(titleArt));
-        } catch (IOException e) {
-            //FIX: missing art shouldn't crash the title screen, just fall back to plain background
-            System.err.println("couldn't load title art at " + TITLE_ART_PATH);
-        }
+        background.setIcon(new ImageIcon(TITLE_ART_PATH));
         add(background);
 
         //FIX: size the content pane itself (not the outer window) so the drawable area

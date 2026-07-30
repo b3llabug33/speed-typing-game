@@ -6,10 +6,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -91,13 +87,7 @@ public class EndScreen extends JFrame {
         //getWidth()/getHeight() are still 0 here since pack() hasn't run yet -
         //use the art's fixed native size directly instead
         background.setBounds(0, 0, 1300, 800);
-        try {
-            BufferedImage endArt = ImageIO.read(new File(END_ART_PATH));
-            background.setIcon(new ImageIcon(endArt));
-        } catch (IOException e) {
-            //FIX: missing art shouldn't crash the end screen, just fall back to plain background
-            System.err.println("couldn't load end screen art at " + END_ART_PATH);
-        }
+        background.setIcon(new ImageIcon(END_ART_PATH));
         add(background);
 
         //FIX: size the content pane itself (not the outer window) so the window matches

@@ -3,11 +3,7 @@
 package org.b3llabug.type_game;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class GameScreen extends JFrame {
@@ -139,13 +135,7 @@ public class GameScreen extends JFrame {
         //getWidth()/getHeight() are still 0 here since pack() hasn't run yet -
         //use the art's fixed native size directly instead
         background.setBounds(0, 0, 1300, 800);
-        try {
-            BufferedImage gameArt = ImageIO.read(new File(GAME_ART_PATH));
-            background.setIcon(new ImageIcon(gameArt));
-        } catch (IOException e) {
-            //FIX: missing art shouldn't crash the game screen, just fall back to plain background
-            System.err.println("couldn't load game art at " + GAME_ART_PATH);
-        }
+        background.setIcon(new ImageIcon(GAME_ART_PATH));
         add(background);
 
         //game timer
