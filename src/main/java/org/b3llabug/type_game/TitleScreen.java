@@ -1,6 +1,6 @@
 package org.b3llabug.type_game;
 
-import java.awt.*;
+import java.awt.*; 
 import javax.swing.*;
 
 public class TitleScreen extends JFrame {
@@ -8,43 +8,34 @@ public class TitleScreen extends JFrame {
     private static final String TITLE_ART_PATH = "assets/speedTypingTitle.png";
 
     public TitleScreen() {
-        setTitle("//speed typing game//");
+        setTitle("//speed typing game//"); //window titlebar text
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //set background color
-        getContentPane().setBackground(new Color(18, 38, 10));
-        //null so i can do custom positions
+        //null so i can do custom positions - it defaults to BorderLayout if not overridden
         setLayout(null);
-
-        //invisible hotspot right over the "start" text on the monitor screen in the art
+        //invisible hotspot right over the "start" text on the monitor screen 
         JButton startButton = new JButton();
-        startButton.setBounds(985, 278, 232, 98);
-        startButton.setContentAreaFilled(false);
+        startButton.setBounds(985, 278, 232, 98); //you wouldnt use setBounds if you used a layout
+        startButton.setContentAreaFilled(false); //these 4 keep button invisible 
         startButton.setBorderPainted(false);
         startButton.setFocusPainted(false);
-        startButton.setOpaque(false);
-        startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        startButton.setOpaque(false);/////////////
+        startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); //turns the default hand into the pointer when hovering over button
         //enter to start game
-        startButton.addActionListener(e -> startGame());
+        startButton.addActionListener(e -> startGame()); 
         add(startButton);
 
-        //background art - added LAST. Swing z-orders null-layout siblings with the
-        //FIRST-added component on top, so the background has to go on after the
-        //overlay controls or it blanks them out - they still receive clicks fine through it.
-        JLabel background = new JLabel();
-        //getWidth()/getHeight() are still 0 here since pack() hasn't run yet -
-        //use the art's fixed native size directly instead
+        //background art - added LAST. 
+        //first added component on top
+        JLabel background = new JLabel(); //use JLabel to store background
         background.setBounds(0, 0, 1300, 800);
         background.setIcon(new ImageIcon(TITLE_ART_PATH));
         add(background);
-
-        //FIX: size the content pane itself (not the outer window) so the drawable area
-        //matches the art's native 1300x800 regardless of title bar height
-        getContentPane().setPreferredSize(new Dimension(1300, 800));
-        pack();
-        setLocationRelativeTo(null);
-    }
-
+        getContentPane().setPreferredSize(new Dimension(1300, 800)); //makes sure nothing is cut off
+        pack(); //applies size changes
+        setLocationRelativeTo(null); //null as the reference component means "center relative to the whole screen" 
+            }                          //rather than relative to some parent window
+    
     private void startGame() {
         // transition to the game screen
         GameScreen gameScreen = new GameScreen();

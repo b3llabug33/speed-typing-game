@@ -7,9 +7,8 @@ import java.util.Random;
 import javax.swing.*;
 
 public class GameScreen extends JFrame {
-    //hand-drawn game screen art (timer panel, typing window, input bar, start button)
+    //game screen art
     private static final String GAME_ART_PATH = "assets/typingGameMainScreen.png";
-
     //ui components
     private JLabel wordLabel, timerLabel;
     private JTextField inputField;
@@ -18,10 +17,8 @@ public class GameScreen extends JFrame {
     private Timer gameTimer;
     //////// game logic components
     private String[] wordBank = {"apple", "arch", "arrow", "bark", "beach", "bear", "bella", "bird", "blade", "bloom", "bloop", "boink", "book", "breeze", "bridge", "brown", "bug", "bump", "buzz", "cake", "candle", "car", "chair", "chip", "circle", "cloud", "coin", "computer", "corn", "crayon", "dance", "dawn", "desk", "dog", "dork", "dream", "drop", "dust", "eagle", "echo", "fence", "field", "fire", "fizz", "flame", "flop", "flower", "fog", "fox", "frog", "game", "gate", "gloop", "goat", "goof", "grass", "gush", "hammer", "hill", "home", "hope", "house", "iphone", "java", "jet", "jump", "jumps", "knot", "lake", "lamp", "lazy", "leaf", "leo", "mantis", "map", "meadow", "mirror", "moo", "moon", "mouse", "noodle", "ocean", "over", "paper", "path", "pen", "pine", "plop", "pop", "program", "programming", "quick", "rain", "random", "ridge", "ring", "river", "road", "rock", "rose", "sand", "shade", "shadow", "ship", "sky", "splat", "star", "starbucks", "stone", "storm", "stream", "sun", "swing", "table", "the", "tide", "tree", "tristan", "typing", "valley", "vine", "wacky", "wave", "whiz", "wind", "wish", "wood", "yap", "yard", "zap", "zing", "anchor", "badge", "basket", "blaze", "bottle", "branch", "bubble", "canyon", "castle", "cherry", "compass", "cricket", "desert", "diamond", "dragon", "emerald", "forest", "galaxy", "garden", "glacier", "horizon", "island", "journey", "jungle", "lantern", "legend", "lotus", "marble", "market", "melody", "mountain", "oasis", "opal", "orchid", "palace", "pebble", "pillar", "prairie", "puzzle", "raven", "rocket", "saddle", "sapphire", "spark", "sparrow", "temple", "thunder", "tiger", "trail", "treasure", "village", "volcano", "waterfall", "willow", "winter", "options", "stocks",
-    //monkeytype-style common short words (from monkeytype's english_1k list) - keeps the
-    //rotation from being dominated by long words like "programming"/"waterfall"
     "of", "to", "and", "in", "is", "it", "you", "that", "he", "was", "for", "on", "are", "with", "as", "his", "they", "be", "at", "one", "have", "this", "from", "or", "had", "by", "not", "word", "but", "what", "some", "we", "can", "out", "other", "were", "all", "there", "when", "up", "use", "your", "how", "said", "an", "each", "she", "which", "do", "their", "time", "if", "will", "way", "about", "many", "then", "them", "write", "would", "like", "so", "these", "her", "long", "make", "thing", "see", "him", "two", "has", "look", "more", "day", "could", "go", "come", "did", "number", "sound", "no", "most", "people", "my", "know", "water", "than", "call", "first", "who", "may", "down", "side", "been", "now", "find", "any", "new", "work", "part", "take", "get", "place", "made", "live", "where", "after", "back", "little", "only", "round", "man", "year", "came", "show", "every", "good", "me", "give", "our", "under", "name", "very", "just", "form", "great", "think", "say", "help", "low", "line", "differ", "turn", "cause", "much", "mean", "before", "move", "right", "boy", "old", "too", "same", "tell", "does", "set", "three", "want", "air", "well"};
-    ////////
+    ////////monkeytype-style common short words (from monkeytype's english_1k list)
     private String[] wordsSequence;
     private Random random = new Random();
     private int currentWordIndex = 0;
@@ -36,23 +33,14 @@ public class GameScreen extends JFrame {
 
     public GameScreen() {
         //main frame
-        setTitle("speed type");
-        //FIX: handle close ourselves below so we can confirm + not just vanish mid-round
+        setTitle("//speed typing game//");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(null);
-
-        //FIX: if this window is closed (X button/Alt+F4), confirm if a round is in
-        //progress, then go back to the title screen instead of just disappearing
+        //if window is closed go back to the title screen instead of just disappearing
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
                 if (isGameRunning) {
-                    int choice = JOptionPane.showConfirmDialog(GameScreen.this,
-                            "Quit this round? Your progress will be lost.",
-                            "Quit round?", JOptionPane.YES_NO_OPTION);
-                    if (choice != JOptionPane.YES_OPTION) {
-                        return; //cancel - keep playing
-                    }
                     gameTimer.stop();
                 }
                 dispose();
@@ -60,45 +48,42 @@ public class GameScreen extends JFrame {
             }
         });
 
-        //fallback background color if the art fails to load
+        //fallback background color 
         getContentPane().setBackground(new Color(110, 153, 56));
 
-        //timer countdown readout - sits right after the "TIME" title drawn in the art,
-        //same sage-green tone as the art's own lettering
+        //timer countdown readout 
         timerLabel = new JLabel("60", SwingConstants.CENTER);
         timerLabel.setFont(new Font("Courier New", Font.BOLD, 22));
         timerLabel.setForeground(new Color(158, 186, 148));
-        //FIX: updated art shifted the whole TIME panel +20x/-10y - moved the hotspot to match
         timerLabel.setBounds(210, 30, 65, 34);
         add(timerLabel);
 
         //invisible hotspots right over the "15"/"30"/"60" boxes drawn in the art
         JButton time15 = new JButton();
         time15.setBounds(61, 78, 88, 78);
-        time15.addActionListener(e -> setTime(15));
+        time15.addActionListener(e -> setTime(15)); //15 seconds
 
         JButton time30 = new JButton();
         time30.setBounds(61, 164, 88, 78);
-        time30.addActionListener(e -> setTime(30));
+        time30.addActionListener(e -> setTime(30)); //30 seconds
 
         JButton time60 = new JButton();
         time60.setBounds(61, 250, 88, 78);
-        time60.addActionListener(e -> setTime(60));
+        time60.addActionListener(e -> setTime(60)); //60 seconds
 
         //"for-each" loop - creates a temp array of 3 buttons and applies one set of rules
         // to each instead of writting it 3 times
         timeButtons = new JButton[]{time15, time30, time60};
         for (JButton btn : timeButtons) {
-            btn.setContentAreaFilled(false);
+            btn.setContentAreaFilled(false); //make invisible
             btn.setBorderPainted(false);
             btn.setFocusPainted(false);
-            btn.setOpaque(false);
+            btn.setOpaque(false); //////
             btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             add(btn);
         }
 
-        //word label - shows sequence of words, sits over the typing window's
-        //green paper area drawn in the art
+        //word label - shows sequence of words
         wordLabel = new JLabel();
         wordLabel.setFont(new Font("Courier New", Font.BOLD, 44));
         wordLabel.setForeground(new Color(20, 40, 10));
@@ -106,18 +91,18 @@ public class GameScreen extends JFrame {
         wordLabel.setVerticalAlignment(SwingConstants.TOP);
         add(wordLabel);
 
-        //input field - invisible/transparent so the drawn input box shows through
+        //input field 
         inputField = new JTextField();
         inputField.setFont(new Font("Courier New", Font.BOLD, 30));
-        inputField.setForeground(new Color(20, 40, 10));
-        inputField.setCaretColor(new Color(20, 40, 10));
+        inputField.setForeground(new Color(20, 40, 10)); //letter color
+        inputField.setCaretColor(new Color(20, 40, 10)); //text cursor color 
         inputField.setOpaque(false);
         inputField.setBorder(null);
         inputField.setBounds(365, 712, 630, 58);
-        inputField.setVisible(false); // Hidden until game starts
+        inputField.setVisible(false); // hidden until game starts
         add(inputField);
 
-        //invisible hotspot right over the "START" text drawn in the art
+        //start button
         startButton = new JButton();
         startButton.setBounds(1042, 712, 190, 58);
         startButton.setContentAreaFilled(false);
@@ -127,22 +112,17 @@ public class GameScreen extends JFrame {
         startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(startButton);
 
-        //background art - added LAST. Swing (this environment/JDK build) paints/z-orders
-        //null-layout siblings with the FIRST-added component on top, so the background
-        //has to be added after all the overlay controls or it blanks out their text -
-        //despite that, JLabel/JButton overlays still receive mouse clicks fine through it.
+        //background art - added LAST
         JLabel background = new JLabel();
-        //getWidth()/getHeight() are still 0 here since pack() hasn't run yet -
-        //use the art's fixed native size directly instead
         background.setBounds(0, 0, 1300, 800);
         background.setIcon(new ImageIcon(GAME_ART_PATH));
         add(background);
 
         //game timer
-        gameTimer = new Timer(1000, e -> {
-            timeLeft--;
-            timerLabel.setText(String.valueOf(timeLeft));
-            if (timeLeft <= 0) {
+        gameTimer = new Timer(1000, e -> { //every 1 second
+            timeLeft--; //time left goes down
+            timerLabel.setText(String.valueOf(timeLeft)); //timer label matches
+            if (timeLeft <= 0) { //if it runs out the game ends 
                 endGame();
             }
         });
@@ -152,8 +132,8 @@ public class GameScreen extends JFrame {
         inputField.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e){
-                if(e.getKeyCode() == java.awt.event.KeyEvent.VK_SPACE){
-                    checkInput();
+                if(e.getKeyCode() == java.awt.event.KeyEvent.VK_SPACE){ //if space is pressed
+                    checkInput(); //call checkInput
                     e.consume(); //prevent extra space
                 }
             }
@@ -161,15 +141,10 @@ public class GameScreen extends JFrame {
 
         //enter button or click
         startButton.addActionListener(e -> startGame());
-
         resetGame();
-
-        //FIX: setSize() sizes the whole window including the title bar, which left the
-        //content pane a bit shorter than 800px and clipped the input field/start button
-        //near the bottom edge. Sizing the content pane itself and packing around it
-        //keeps the drawable area exactly matching the art's native 1300x800.
+        //FIX: setSize() sizes the whole window including the title bar so the art gets clipped 
         getContentPane().setPreferredSize(new Dimension(1300, 800));
-        pack();
+        pack(); //load
         setLocationRelativeTo(null);
     }
 
@@ -181,12 +156,12 @@ public class GameScreen extends JFrame {
 
         private void startGame(){
         isGameRunning = true;
-        //FIX: lock the time presets and start button so they can't disrupt a round in progress
+        //lock the time presets and start button so they can't disrupt a round in progress
         startButton.setEnabled(false);
         for(JButton btn : timeButtons){
             btn.setEnabled(false);
         }
-        inputField.setVisible(true);
+        inputField.setVisible(true); //show things now
         inputField.setEnabled(true);
         inputField.setText("");
         inputField.requestFocus();
@@ -213,7 +188,7 @@ public class GameScreen extends JFrame {
         }
 
 
-        //updates word label and highlights current wordls(wordsSequence[currentWordIndex
+        //updates word label and highlights current words(wordsSequence[currentWordIndex
         private void updateWordsLabel(){
             //create a string builder to build the html string for label
             //<html> tag lets you use HTML formatting in swing labels
