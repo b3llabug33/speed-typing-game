@@ -1,14 +1,12 @@
 # Speed Typing Game
 
-A Java Swing desktop application for practicing typing speed and accuracy. Features multiple screens, theme customization, and end-of-round scoring.
+A Java Swing desktop application for practicing typing speed and accuracy. Features multiple screens, custom art, time selection, and end-of-round scoring.
 
 ## Features
 
 - Randomized word/phrase prompts
 - Real-time accuracy tracking
 - WPM (words per minute) calculation
-- Customizable color themes
-- Settings menu
 - End screen with round summary
 
 ## Screenshots
