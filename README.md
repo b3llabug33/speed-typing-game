@@ -1,42 +1,27 @@
 # Speed Typing Game
 
-A Java Swing desktop application for practicing typing speed and accuracy. Features multiple screens, custom art, time selection, and end-of-round scoring.
+A little Java Swing game I made to practice typing speed. Type the words as they show up before the timer runs out, then see your WPM and accuracy on the end screen.
 
-## Features
+## What it does
 
-- Randomized word/phrase prompts
-- Real-time accuracy tracking
-- WPM (words per minute) calculation
-- End screen with round summary
+- Pick a time limit before you start — 15, 30, or 60 seconds
+- Type the words shown on screen (word bank has ~250 words, mostly short/common ones with a few longer ones mixed in)
+- Words come in chunks and refill automatically as you go, just hit space after each word
+- When time's up you land on an end screen with your WPM and accuracy, plus buttons to play again or go back to the title screen
+- Everything's drawn over hand-drawn background art instead of default gray Swing buttons
 
-## Screenshots
+## How to run
 
-_Title screen → Game screen → End screen_
-
-## How to Run
-
-Requires Java 11+.
+Needs Java 11+. Run these from the repo root — the art won't load if you `cd` into `src` first since the `assets/` folder lives at the top level:
 
 ```bash
-cd src/main/java
-javac org/b3llabug/type_game/*.java
-java org.b3llabug.type_game.Type_Game
+javac -d bin src/main/java/org/b3llabug/type_game/*.java
+java -cp bin org.b3llabug.type_game.Type_Game
 ```
 
-## Project Structure
+## Files
 
-```
-src/main/java/org/b3llabug/type_game/
-├── Type_Game.java      # Entry point, launches Swing EDT
-├── TitleScreen.java    # Start menu
-├── GameScreen.java     # Main typing interface
-├── SettingsMenu.java   # Theme and settings configuration
-├── EndScreen.java      # Score summary after each round
-├── Theme.java          # Theme data class
-└── ThemeManager.java   # Manages and applies themes
-```
-
-## Requirements
-
-- Java 11+
-- No external dependencies
+- `Type_Game.java` — entry point, just launches the title screen
+- `TitleScreen.java` — start screen
+- `GameScreen.java` — the actual game: word bank, timer, WPM/accuracy tracking
+- `EndScreen.java` — shows your score, play again / home buttons
